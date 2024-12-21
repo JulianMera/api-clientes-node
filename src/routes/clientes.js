@@ -26,4 +26,15 @@ router.get('/clientes-por-edad', async (req, res) => {
     res.json(resultado);
 });
 
+router.get('/edad-promedio', async (req, res) => {
+    const clientes = await Cliente.findAll();
+    const cantidad = clientes.length;
+    const edadPromedio = clientes.reduce((sum, cliente) => {
+        const edad = new Date().getFullYear() - new Date(cliente.fechaNacimiento).getFullYear();
+        return sum + edad;
+    }, 0) / cantidad || 0;
+
+    res.json({ cantidad, edadPromedio });
+});
+
 module.exports = router;
